@@ -1,12 +1,16 @@
 # Analog Toolbar Clock
 
-Chrome toolbar에 작은 아날로그 시계를 표시하는 Manifest V3 확장프로그램입니다.
+Chrome toolbar에 배경과 테두리 없는 미니멀 아날로그 시계를 표시하는 Manifest V3 확장프로그램입니다.
 
 ## 기능
 
-- 툴바 아이콘에 아날로그 시계 표시
+- 툴바 아이콘에 미니멀 아날로그 시계 표시
 - 시침 / 분침만 표시
 - 초침 없음
+- 숫자 없음
+- 배경 원과 외곽 테두리 없음
+- 12 / 3 / 6 / 9 위치에 작은 점 4개만 표시
+- 라이트모드에서는 검정 계열 `#111111`, 다크모드에서는 흰색 `#ffffff`으로 자동 전환
 - popup 없음
 - 외부 라이브러리 없음
 - 아이콘 hover tooltip에 `5월 26일 18:38` 형식 표시
@@ -28,8 +32,10 @@ chrome://extensions
 ## 동작 방식
 
 * service worker가 실행되면 즉시 현재 시간으로 아이콘과 tooltip을 갱신합니다.
-* 아이콘은 `OffscreenCanvas`로 직접 그린 뒤 `chrome.action.setIcon()`으로 적용합니다.
+* 아이콘은 투명 배경의 `OffscreenCanvas`에 4개 점, 시침, 분침, 작은 중심점만 직접 그린 뒤 `chrome.action.setIcon()`으로 적용합니다.
 * tooltip은 `chrome.action.setTitle()`로 적용합니다.
+* service worker에서는 `window.matchMedia()`를 직접 사용할 수 없기 때문에 `offscreen.html` 문서를 만들고, `offscreen.js`에서 `window.matchMedia("(prefers-color-scheme: dark)")`로 시스템 색상 모드를 감지합니다.
+* 라이트/다크 모드가 바뀌면 offscreen 문서가 background service worker로 `COLOR_SCHEME_CHANGED` 메시지를 보내고, background는 아이콘을 즉시 다시 그립니다.
 * 갱신 후 `chrome.alarms.create({ when })`으로 다음 분 정각에 1회성 알람을 예약합니다.
 * 알람이 울리면 다시 현재 시간으로 갱신하고, 다음 분 정각 알람을 재예약합니다.
 
