@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Analog Toolbar Clock",
+  "version": "1.0.0",
+  "description": "Chrome toolbar에 시침과 분침이 있는 아날로그 시계를 표시합니다.",
+  "minimum_chrome_version": "120",
+  "permissions": ["alarms"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Analog Toolbar Clock"
+  }
+}
