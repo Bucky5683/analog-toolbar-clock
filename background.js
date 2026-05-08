@@ -140,6 +140,11 @@ function drawClockHands(ctx, center, radius, date, size, color) {
 }
 
 function drawClockIcon(size, date, color) {
+  console.log("Drawing minimal transparent icon:", {
+    size,
+    color
+  });
+
   const canvas = new OffscreenCanvas(size, size);
   const ctx = canvas.getContext("2d");
 
@@ -157,6 +162,13 @@ async function updateClock() {
   const now = new Date();
   const colorScheme = await getSystemColorScheme();
   const color = getClockColor(colorScheme);
+
+  console.log("Analog Toolbar Clock updated:", {
+    colorScheme,
+    color,
+    tooltip: formatTooltipDateTime(now)
+  });
+
   const imageData = {};
 
   for (const size of ICON_SIZES) {
